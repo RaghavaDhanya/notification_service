@@ -1,0 +1,16 @@
+[Unit]
+Description=desktop notification service
+After=network.target
+StartLimitIntervalSec=0
+BindsTo=graphical-session.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=3
+ExecStart=/usr/bin/env python3 /path/to/client.py
+Environment=GOOGLE_APPLICATION_CREDENTIALS=/path/to/gcloud_cred.json
+Environment=DISPLAY=:0
+
+[Install]
+WantedBy=default.target
