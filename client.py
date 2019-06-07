@@ -2,7 +2,6 @@ import os
 import subprocess
 import base64
 
-# import atexit
 
 from google.cloud import pubsub_v1
 
@@ -15,12 +14,14 @@ subscription_name = 'projects/{project_id}/subscriptions/{sub}'.format(
     project_id="<project-id>",
     sub='<subscription-name>',  # Set this to something appropriate.
 )
+# we are not creating subscriptions, should be manually created in pub sub dashboard
 # subscription = subscriber.create_subscription(
 #     name=subscription_name, topic=topic_name)
 
 
 def callback(message):
     print(message)
+    # create the notification command by adding each option if it exists in the message data
     command = (['notify-send'] +
                (['--icon=' +
                  message.attributes['icon']] if 'icon' in message.attributes else []) +
@@ -34,7 +35,9 @@ def callback(message):
                  message.attributes['app-name']] if 'app-name' in message.attributes else []) +
                ([message.attributes['subject']] if 'subject' in message.attributes else []) +
                [message.data.decode('utf-8')])
+    # run the command
     subprocess.run(command)
+    # acknowledge the receive of the message to pub sub
     message.ack()
 
 

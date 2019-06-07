@@ -19,12 +19,12 @@ function doPost(request) {
             'method': 'post',
             payload: "{'messages':[{'data':'" + Utilities.base64Encode(message) + "','attributes':" + JSON.stringify(data) + "}]}"
         });
-
+        return HtmlService.createHtmlOutput("<h1>Success</h1>");
     }
     else {
         Logger.log(service.getLastError());
+        return HtmlService.createHtmlOutput("<h1>Failed</h1>");
     }
-    return HtmlService.createHtmlOutput().append("success")
 }
 function reset() {
     var service = getService();
